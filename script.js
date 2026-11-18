@@ -59,24 +59,43 @@ window.onload = typeWriter;
 // Music Play Button
 // ==========================
 
-const song = document.getElementById("song");
-const playBtn = document.getElementById("playBtn");
+document.addEventListener("DOMContentLoaded", function () {
 
-playBtn.addEventListener("click", function () {
+    const song = document.getElementById("song");
+    const playBtn = document.getElementById("playBtn");
 
-    if(song.paused){
-        song.play().then(()=>{
-            playBtn.innerHTML="⏸ Pause Song";
-        }).catch(err=>{
-            console.log(err);
-        });
-    }else{
-        song.pause();
-        playBtn.innerHTML="▶ Play Song";
+    if (!song || !playBtn) {
+        console.error("Song or Play Button not found!");
+        return;
     }
 
-});
+    playBtn.addEventListener("click", async function () {
 
+        if (song.paused) {
+
+            try {
+                await song.play();
+                playBtn.innerHTML = "⏸ Pause Song";
+
+            } catch (error) {
+                console.error("Music Error:", error);
+                alert("Song play nahi ho raha! MP3 file check karo.");
+            }
+
+        } else {
+
+            song.pause();
+            playBtn.innerHTML = "▶ Play Song";
+
+        }
+
+    });
+
+    song.addEventListener("ended", function () {
+        playBtn.innerHTML = "▶ Play Song";
+    });
+
+});
 
 // ==========================
 // Scroll Reveal Animation
